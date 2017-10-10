@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Citadel.Core", "Citadel.Core\Citadel.Core.csproj", "{3323C7CA-0FCC-4217-93F1-31E134185BFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3323C7CA-0FCC-4217-93F1-31E134185BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3323C7CA-0FCC-4217-93F1-31E134185BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3323C7CA-0FCC-4217-93F1-31E134185BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3323C7CA-0FCC-4217-93F1-31E134185BFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {301D4512-7AB8-426A-B1AD-2DB2DB967421}
+	EndGlobalSection
+EndGlobal
