@@ -1,14 +1,15 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Citadel.Infrastructure
+﻿namespace Citadel.Infrastructure
 {
     public interface IQueue
     {
-        Task<MessageContext> ConsumeAsync();
+        IExchange Exchange { get;  }
 
-        void Subscribe(Action<MessageContext> callback);
+        string QueueName { get;  }
+        QueueDeclareOptions Options { get;  }
 
-        Task BindToExchangeAsync(string exchangeName);
+
+        T GetArgumentValue<T>(string key);
+
+        IConsumer CreateConsumer(string topic, object arguments);
     }
 }

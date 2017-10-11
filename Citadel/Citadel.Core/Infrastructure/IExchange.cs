@@ -4,7 +4,11 @@ namespace Citadel.Infrastructure
 {
     public interface IExchange
     {
-        Task<IQueue> QueueDeclareAsync(string queueName, string queueType, object args);
+        string ExchangeName { get;  }
+        string ExchangeType { get;  }
+        T GetArgumentValue<T>(string key);
 
+        Task<QueueDeclareResult> QueueDeclareAsync(string queueName, QueueDeclareOptions options, object args);
+        Task PublishAsync<TContent>(string topic, TContent content, object arguments, ISerializer serializer = null);
     }
 }
