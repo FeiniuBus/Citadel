@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Citadel.Core\Shared\AnomalousObjectExtensions.cs" Link="Shared\AnomalousObjectExtensions.cs" />
+    <Compile Include="..\Citadel.Core\Shared\IDbConnectionExtensions.cs" Link="Shared\IDbConnectionExtensions.cs" />
+    <Compile Include="..\Citadel.Core\Shared\StringExtensions.cs" Link="Shared\StringExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Citadel.Core\Citadel.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Shared\" />
+  </ItemGroup>
+
+</Project>
