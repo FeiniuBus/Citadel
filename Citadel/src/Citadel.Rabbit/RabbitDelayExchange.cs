@@ -1,4 +1,5 @@
 ﻿using Citadel.Infrastructure;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Citadel.Rabbit
 {
-    public class RabbitDelayExchange : RabbitExchange, IDelayExchange
+    public class RabbitDelayExchange : RabbitExchange
     {
-        protected internal RabbitDelayExchange(string exchangeName, string exchangeType, object arguments, IConnection connection, IModel channel) : base(exchangeName, exchangeType, arguments, connection, channel)
+        protected internal RabbitDelayExchange(string exchangeName, string exchangeType, object arguments, IConnection connection, IModel channel, ILoggerFactory loggerFactory) : base(exchangeName, exchangeType, arguments, connection, channel, loggerFactory)
         {
         }
 

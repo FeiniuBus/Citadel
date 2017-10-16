@@ -1,6 +1,6 @@
 ﻿namespace Citadel.Data
 {
-    public class WorkUnitOptions
+    public class DbConnectionFactoryOptions
     {
         public string ConnectionString { get; set; }
     }

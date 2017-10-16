@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\Citadel.Core\Shared\AnomalousObjectExtensions.cs" Link="Shared\AnomalousObjectExtensions.cs" />
+    <Compile Include="..\Citadel.Core\Shared\ExceptionExtensions.cs" Link="Shared\ExceptionExtensions.cs" />
     <Compile Include="..\Citadel.Core\Shared\IDbConnectionExtensions.cs" Link="Shared\IDbConnectionExtensions.cs" />
     <Compile Include="..\Citadel.Core\Shared\StringExtensions.cs" Link="Shared\StringExtensions.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using Citadel.Infrastructure;
-using Citadel.Internal;
+using Citadel.Shared;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,16 @@ namespace Citadel.Rabbit
         protected readonly IConnection _connection;
         protected readonly IModel _channel;
         protected readonly IReadOnlyDictionary<string, object> _args;
-
-        protected internal RabbitExchange(string exchangeName, string exchangeType, object arguments, IConnection connection, IModel channel)
+        private readonly ILoggerFactory _loggerFactory;
+ 
+        protected internal RabbitExchange(string exchangeName, string exchangeType, object arguments, IConnection connection, IModel channel, ILoggerFactory loggerFactory)
         {
             ExchangeName = exchangeName;
             ExchangeType = exchangeType;
             _args = arguments == null ? new ReadOnlyDictionary<string, object>(new Dictionary<string, object>()) : new ReadOnlyDictionary<string, object>(arguments.Map());
             _connection = connection;
             _channel = channel;
+            _loggerFactory = loggerFactory;
         }
 
         public string ExchangeName { get; private set; }
@@ -39,7 +42,7 @@ namespace Citadel.Rabbit
                 return await Task.Run(() =>
                 {
                     var resp = _channel.QueueDeclare(queueName, options.Durable, options.Exclusive, options.AutoDelete, arguments == null ? new Dictionary<string, object>() : arguments.Map());
-                    var queue = new RabbitQueue(queueName, options, arguments, this, _channel);
+                    var queue = new RabbitQueue(queueName, options, arguments, this, _channel, _loggerFactory);
                     return QueueDeclareResult.Success(queue);
                 });
             }
@@ -48,26 +51,38 @@ namespace Citadel.Rabbit
                 return QueueDeclareResult.Failed(e);
             }
         }
-        
+
         public async Task PublishAsync(string topic, byte[] content, object arguments)
         {
-            IBasicProperties basicProperties = null;
-            if(arguments != null)
-            {
-                basicProperties = _channel.CreateBasicProperties();
-                 var properties = typeof(IBasicProperties).GetProperties(System.Reflection.BindingFlags.Public)
-                    .Where(x => x.CanWrite);
-                var propertyNames = properties.Select(x => x.Name);
-                var argumentProperties = arguments.GetType().GetProperties().Where(x => propertyNames.Contains(x.Name));
-                foreach(var argumentProperty in argumentProperties)
-                {
-                    var value = argumentProperty.GetValue(arguments);
-                    var property = properties.First(x => x.Name == argumentProperty.Name);
-                    property.SetValue(basicProperties, value);
-                }
-            }
             await Task.Run(() =>
             {
+                IBasicProperties basicProperties = _channel.CreateBasicProperties();
+                if (arguments != null)
+                {
+                    var properties = basicProperties.GetType().GetProperties()
+                       .Where(x => x.CanWrite);
+                    var propertyNames = properties.Select(x => x.Name);
+                    var argumentProperties = arguments.GetType().GetProperties().Where(x => propertyNames.Contains(x.Name));
+                    foreach (var argumentProperty in argumentProperties)
+                    {
+                        var value = argumentProperty.GetValue(arguments);
+
+                        if (argumentProperty.Name == "Headers")
+                        {
+                            basicProperties.Headers = new Dictionary<string, object>();
+                            foreach (var item in (Dictionary<string, object>)value)
+                            {
+                                basicProperties.Headers.Add(item.Key, item.Value);
+                            }
+                        }
+                        else
+                        {
+                            var property = properties.First(x => x.Name == argumentProperty.Name);
+                            property.SetValue(basicProperties, value);
+                        }
+                    }
+                }
+
                 _channel.BasicPublish(ExchangeName, topic, basicProperties, content);
             });
         }

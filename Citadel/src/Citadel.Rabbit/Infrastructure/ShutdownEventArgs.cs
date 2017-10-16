@@ -1,5 +1,5 @@
 ﻿using Citadel.Infrastructure;
-using Citadel.Internal;
+using Citadel.Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

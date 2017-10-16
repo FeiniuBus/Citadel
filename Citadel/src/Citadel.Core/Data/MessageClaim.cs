@@ -1,10 +1,9 @@
 ﻿using Citadel.Infrastructure;
-using Citadel.Postgre.Infrastructure;
 using System;
 
-namespace Citadel.Postgre.DomainModel
+namespace Citadel.Data
 {
-    public class MessageClaim : IEntity<string>
+    public class MessageClaim
     {
         public string Id { get; set; }
         public string MessageId { get; set; }

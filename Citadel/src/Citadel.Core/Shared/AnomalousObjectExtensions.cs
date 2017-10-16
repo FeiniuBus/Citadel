@@ -9,7 +9,7 @@ namespace Citadel.Shared
         {
             var properties = value.GetType().GetProperties();
             var collection = properties.Select(x => new KeyValuePair<string, object>(x.Name.Replace("__","-") , x.GetValue(value)));
-            return new Dictionary<string, object>(collection);
+            return collection.ToDictionary(x => x.Key, x => x.Value);
         }
 
         internal static T As<T>(this object obj) where T : class => obj as T;

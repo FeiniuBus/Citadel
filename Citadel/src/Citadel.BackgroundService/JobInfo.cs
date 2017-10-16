@@ -11,6 +11,8 @@ namespace Citadel.BackgroundService
         {
             JobId = Guid.NewGuid().ToString("N");
             JobKind = jobKind;
+            MethodCall = methodCall;
+            CreationTime = DateTime.Now;
         }
 
         public string JobId { get; set; }
@@ -18,5 +20,10 @@ namespace Citadel.BackgroundService
         public Expression<Action> MethodCall { get; set; }
         public IReadOnlyDictionary<string, object> Properties { get; set; }
         public DateTime CreationTime { get; set; }
+
+        public static JobInfo CreateDelayJob(Expression<Action> methodCall)
+        {
+            return new JobInfo(JobKind.DelayJob, methodCall);
+        }
     }
 }

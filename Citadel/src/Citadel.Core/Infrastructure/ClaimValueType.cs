@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Citadel.Postgre.Infrastructure
+namespace Citadel.Infrastructure
 {
     public class ClaimValueType
     {

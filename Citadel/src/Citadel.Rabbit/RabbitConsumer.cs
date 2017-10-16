@@ -1,6 +1,8 @@
 ﻿using Citadel.Infrastructure;
-using Citadel.Internal;
 using Citadel.Rabbit.Infrastructure;
+using Citadel.Shared;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Collections.Generic;
@@ -14,13 +16,15 @@ namespace Citadel.Rabbit
         private readonly IQueue _queue;
         private readonly IModel _channel;
         private readonly IReadOnlyDictionary<string, object> _args;
+        private readonly ILogger _logger;
 
-        protected internal RabbitConsumer(string topic, object args, IQueue queue, IModel channel)
+        protected internal RabbitConsumer(string topic, object args, IQueue queue, IModel channel, ILogger<RabbitConsumer> logger)
         {
             Topic = topic;
             _args = args == null ? new ReadOnlyDictionary<string, object>(new Dictionary<string,object>()) : new ReadOnlyDictionary<string, object>(args.Map());
             _queue = queue;
             _channel = channel;
+            _logger = logger;
         }
 
         public IQueue Queue => _queue;
@@ -37,6 +41,12 @@ namespace Citadel.Rabbit
         public Task SubscribeAsync()
         {
             var consumer = new EventingBasicConsumer(_channel);
+
+            consumer.ConsumerCancelled += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(RabbitConsumer), Event = "ConsumerCancelled", e.ConsumerTag }));
+            consumer.Received += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(RabbitConsumer), Event = "Received", e.ConsumerTag, ContentLength = e.Body.Length, e.DeliveryTag, e.Exchange,e.Redelivered, e.RoutingKey }));
+            consumer.Registered += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(RabbitConsumer), Event = "Registered", e.ConsumerTag }));
+            consumer.Shutdown += (sender, e) => _logger.LogWarning(JsonConvert.SerializeObject(new { Source = nameof(RabbitConsumer), Event = "Shutdown", e.Cause, e.ClassId, e.MethodId, e.ReplyCode, e.ReplyText }));
+
             consumer.Received += (sender, e) => OnDelivered?.Invoke(this, new DeliverEventArgs(e.Body, 
                 new
                 {

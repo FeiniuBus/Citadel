@@ -5,8 +5,6 @@ namespace Citadel.Infrastructure
 {
     public class QueueDeclareResult
     {
-        private readonly IReadOnlyDictionary<string, object> _data;
-
         private QueueDeclareResult(IEnumerable<string> errors)
         {
             Succeeded = false;

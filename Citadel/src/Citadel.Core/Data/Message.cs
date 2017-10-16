@@ -1,14 +1,14 @@
-﻿using Citadel.Infrastructure;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Citadel.Postgre.DomainModel
+namespace Citadel.Data
 {
-    public class Message : IEntity<string>,IAggregateRoot
+    public class Message
     {
 
         public Message()
         {
-            Claims = new TrackedList<MessageClaim>();
+            Claims = new List<MessageClaim>();
         }
 
         public string Id { get; set; }
@@ -18,6 +18,6 @@ namespace Citadel.Postgre.DomainModel
         public string StateName => State.ToString();
         public DateTime CreationTime { get; set; }
 
-        public TrackedList<MessageClaim> Claims { get; set; }
+        public List<MessageClaim> Claims { get; set; }
     }
 }

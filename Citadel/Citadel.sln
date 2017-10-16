@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{75AAAAEF-22BB-417D-84F3-869E75713CFA}"
 EndProject
@@ -11,7 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citadel.BackgroundService",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citadel.Rabbit", "src\Citadel.Rabbit\Citadel.Rabbit.csproj", "{DD8B710F-61FC-453F-8C6F-684F5EBB8B81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Citadel.PostgreSQL", "src\Citadel.PostgreSQL\Citadel.PostgreSQL.csproj", "{7068C66E-9546-42BD-B5FF-61C28D8DE37C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Citadel.PostgreSQL", "src\Citadel.PostgreSQL\Citadel.PostgreSQL.csproj", "{7068C66E-9546-42BD-B5FF-61C28D8DE37C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Citadel.EventHub", "Citadel.EventHub\Citadel.EventHub.csproj", "{E04B0672-F809-48F5-9D22-61C4FEE5242E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{BCE84707-8AEB-433F-BC3B-C50D99E48CD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundService.Sample", "sample\BackgroundService.Sample\BackgroundService.Sample.csproj", "{24B8A280-D2A3-41E5-82C9-5CFF1C15C289}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +41,14 @@ Global
 		{7068C66E-9546-42BD-B5FF-61C28D8DE37C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7068C66E-9546-42BD-B5FF-61C28D8DE37C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7068C66E-9546-42BD-B5FF-61C28D8DE37C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E04B0672-F809-48F5-9D22-61C4FEE5242E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04B0672-F809-48F5-9D22-61C4FEE5242E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04B0672-F809-48F5-9D22-61C4FEE5242E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04B0672-F809-48F5-9D22-61C4FEE5242E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24B8A280-D2A3-41E5-82C9-5CFF1C15C289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24B8A280-D2A3-41E5-82C9-5CFF1C15C289}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24B8A280-D2A3-41E5-82C9-5CFF1C15C289}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24B8A280-D2A3-41E5-82C9-5CFF1C15C289}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +58,8 @@ Global
 		{9CA3A58A-42AE-4EA5-8DE3-738B028F9A37} = {75AAAAEF-22BB-417D-84F3-869E75713CFA}
 		{DD8B710F-61FC-453F-8C6F-684F5EBB8B81} = {75AAAAEF-22BB-417D-84F3-869E75713CFA}
 		{7068C66E-9546-42BD-B5FF-61C28D8DE37C} = {75AAAAEF-22BB-417D-84F3-869E75713CFA}
+		{E04B0672-F809-48F5-9D22-61C4FEE5242E} = {75AAAAEF-22BB-417D-84F3-869E75713CFA}
+		{24B8A280-D2A3-41E5-82C9-5CFF1C15C289} = {BCE84707-8AEB-433F-BC3B-C50D99E48CD4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {301D4512-7AB8-426A-B1AD-2DB2DB967421}

@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Citadel.Core\Citadel.Core.csproj" />
+    <ProjectReference Include="..\Citadel.PostgreSQL\Citadel.PostgreSQL.csproj" />
     <ProjectReference Include="..\Citadel.Rabbit\Citadel.Rabbit.csproj" />
   </ItemGroup>
 
