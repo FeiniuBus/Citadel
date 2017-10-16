@@ -1,4 +1,4 @@
-﻿using Citadel.BackgroundService.Infrastructure;
+﻿using Citadel.Data;
 using Citadel.Infrastructure;
 using System;
 using System.Reflection;
@@ -11,21 +11,25 @@ namespace Citadel.BackgroundService.Data.DomainModel
         {
 
         }
-
-        public Job(JobInfo jobInfo)
-        {
-            Id = jobInfo.JobId;
-            Expression = jobInfo.MethodCall.ToString();
-            MethodCall = ExpressionJsonConvert.Serialize(jobInfo.MethodCall, Assembly.GetExecutingAssembly());
-            State = JobState.Scheduled;
-            CreationTime = DateTime.Now;
-        }
-
-        public string Id { get; set; }
         public string Expression { get; set; }
-        public string MethodCall { get; set; }
-        public JobState State { get; set; }
-        public string StateName => State.ToString();
-        public DateTime CreationTime { get; set; }
+
+        public Message Message { get; set; }
+
+        public static Job CreateJob(JobInfo jobInfo)
+        {
+            var job = new Job()
+            {
+                Message = new Message()
+                {
+                    Id = Guid.NewGuid().ToString("N"),
+                    MessageType = "BackgroundJob",
+                    State = MessageState.Scheduled,
+                    Content = ExpressionJsonConvert.Serialize(jobInfo.MethodCall, Assembly.GetExecutingAssembly()),
+                    CreationTime = DateTime.Now,
+                },
+                Expression = jobInfo.MethodCall.ToString(),
+            };
+            return job;
+        }
     }
 }

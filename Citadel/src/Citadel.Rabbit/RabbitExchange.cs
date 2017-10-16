@@ -1,11 +1,13 @@
 ﻿using Citadel.Infrastructure;
 using Citadel.Shared;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Citadel.Rabbit
@@ -86,6 +88,12 @@ namespace Citadel.Rabbit
                 _channel.BasicPublish(ExchangeName, topic, basicProperties, content);
             });
         }
-        
+
+        public Task PublishAsync(string topic, TransferMessage transferMessage, object arguments)
+        {
+            var json = JsonConvert.SerializeObject(transferMessage);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            return PublishAsync(topic, bytes, arguments);
+        }
     }
 }

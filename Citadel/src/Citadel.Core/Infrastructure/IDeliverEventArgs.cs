@@ -5,7 +5,7 @@ namespace Citadel.Infrastructure
     public interface IDeliverEventArgs
     {
         IReadOnlyDictionary<string, object> Properties { get; }
-        byte[] Content { get; }
+        TransferMessage Content { get; }
 
         void BasicAck();
         void BasicNack(bool requeue);

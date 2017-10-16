@@ -11,5 +11,6 @@ namespace Citadel
 
         Task<QueueDeclareResult> QueueDeclareAsync(string queueName, QueueDeclareOptions options, object args);
         Task PublishAsync(string topic, byte[] content, object arguments);
+        Task PublishAsync(string topic, TransferMessage transferMessage, object arguments);
     }
 }

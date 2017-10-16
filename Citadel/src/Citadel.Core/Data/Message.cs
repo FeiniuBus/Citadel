@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Citadel.Infrastructure;
+using System;
 using System.Collections.Generic;
 
 namespace Citadel.Data

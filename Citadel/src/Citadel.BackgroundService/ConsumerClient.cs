@@ -51,9 +51,7 @@ namespace Citadel.BackgroundService
 
         private void Consumer_OnDelivered(IConsumer sender, IDeliverEventArgs args)
         {
-            var jsonStr = System.Text.Encoding.UTF8.GetString(args.Content);
-            var job = JsonConvert.DeserializeObject<Job>(jsonStr);
-            var expr = ExpressionJsonConvert.Deserialize(job.MethodCall, Assembly.GetExecutingAssembly());
+            var expr = ExpressionJsonConvert.Deserialize(args.Content.Body, Assembly.GetExecutingAssembly());
             var act = expr.Compile();
             act.Invoke();
             args.BasicAck();
