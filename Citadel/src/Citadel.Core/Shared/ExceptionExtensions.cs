@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Citadel.Shared
 {
-    internal static class ExceptionExtensions
+    public static class ExceptionExtensions
     {
-        internal static IEnumerable<string> GetErrors(this Exception exception)
+        public static IEnumerable<string> GetErrors(this Exception exception)
         {
             Exception e = exception;
             var errors = new List<string>();

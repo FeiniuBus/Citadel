@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BackgroundServiceTestLib\BackgroundServiceTestLib.csproj" />
     <ProjectReference Include="..\..\src\Citadel.BackgroundService\Citadel.BackgroundService.csproj" />
     <ProjectReference Include="..\..\src\Citadel.Core\Citadel.Core.csproj" />
   </ItemGroup>

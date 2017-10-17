@@ -3,15 +3,15 @@ using System.Linq;
 
 namespace Citadel.Shared
 {
-    internal static class AnomalousObjectExtensions
+    public static class AnomalousObjectExtensions
     {
-        internal static IDictionary<string, object> Map(this object value)
+        public static IDictionary<string, object> Map(this object value)
         {
             var properties = value.GetType().GetProperties();
             var collection = properties.Select(x => new KeyValuePair<string, object>(x.Name.Replace("__","-") , x.GetValue(value)));
             return collection.ToDictionary(x => x.Key, x => x.Value);
         }
 
-        internal static T As<T>(this object obj) where T : class => obj as T;
+        public static T As<T>(this object obj) where T : class => obj as T;
     }
 }

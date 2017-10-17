@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Threading.Tasks;
 
-namespace Citadel.Infrastructure
+namespace Citadel
 {
     public interface IStorage
     {

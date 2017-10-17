@@ -6,10 +6,11 @@ namespace Citadel.Infrastructure
 {
     public class ClaimValueType
     {
-        private ClaimValueType() { }
+        public ClaimValueType() { }
 
-        public ClaimValueType(Type t)
+        public static ClaimValueType Create(Type t)
         {
+            var cvt = new ClaimValueType();
             if (new[]
             {
                 typeof(short),
@@ -25,22 +26,25 @@ namespace Citadel.Infrastructure
                 typeof(byte)
             }.Contains(t))
             {
-                IsComplexType = false;
-                IsBase64 = false;
+                cvt.IsComplexType = false;
+                cvt.IsBase64 = false;
             }
             else if (t == typeof(byte[]))
             {
-                IsComplexType = false;
-                IsBase64 = true;
+                cvt.IsComplexType = false;
+                cvt.IsBase64 = true;
             }
             else
             {
-                IsComplexType = true;
-                IsBase64 = false;
+                cvt.IsComplexType = true;
+                cvt.IsBase64 = false;
             }
 
-            FullName = t.FullName;
+            cvt.FullName = t.FullName;
+
+            return cvt;
         }
+
 
         public bool IsComplexType { get; set; }
         public bool IsBase64 { get; set; }

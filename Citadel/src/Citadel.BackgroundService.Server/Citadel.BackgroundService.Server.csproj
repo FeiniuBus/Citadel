@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Citadel.BackgroundService\Citadel.BackgroundService.csproj" />
+    <ProjectReference Include="..\Citadel.Core\Citadel.Core.csproj" />
+    <ProjectReference Include="..\Citadel.PostgreSQL\Citadel.PostgreSQL.csproj" />
+    <ProjectReference Include="..\Citadel.Rabbit\Citadel.Rabbit.csproj" />
+    <ProjectReference Include="..\Citadel.Server\Citadel.Server.csproj" />
+  </ItemGroup>
+
+</Project>

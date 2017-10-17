@@ -2,14 +2,14 @@
 
 namespace Citadel.Shared
 {
-    internal static class StringExtensions
+    public static class StringExtensions
     {
-        internal static byte[] ToBytes(this string value, Encoding encoding)
+        public static byte[] ToBytes(this string value, Encoding encoding)
         {
             return encoding.GetBytes(value);
         }
 
-        internal static string ToString(this byte[] value, Encoding encoding)
+        public static string ToString(this byte[] value, Encoding encoding)
         {
             return encoding.GetString(value);
         }

@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace Citadel.Shared
 {
-    internal static class IDbConnectionExtensions
+    public static class IDbConnectionExtensions
     {
-        internal static async Task OpenAsync(this IDbConnection dbConnection)
+        public static async Task OpenAsync(this IDbConnection dbConnection)
         {
             await Task.Run(() => dbConnection.Open());
         }

@@ -1,4 +1,6 @@
-﻿using Citadel.Shared;
+﻿using Citadel.Extensions;
+using Citadel.Logging;
+using Citadel.Shared;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -24,11 +26,11 @@ namespace Citadel.Rabbit
             {
                 _logger.LogError(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "CallbackException", e.Detail, Errors = e.Exception.GetErrors() }));
             };
-            _connection.ConnectionBlocked += (sender, e) => _logger.LogError(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "ConnectionBlocked", e.Reason}));
-            _connection.ConnectionRecoveryError += (sender, e) => _logger.LogError(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "ConnectionRecoveryError", Errors = e.Exception.GetErrors() }));
-            _connection.ConnectionShutdown += (sender, e) => _logger.LogError(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "ConnectionShutdown", e.Cause, e.ClassId, e.MethodId, e.ReplyCode, e.ReplyText }));
-            _connection.ConnectionUnblocked += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "ConnectionUnblocked" }));
-            _connection.RecoverySucceeded += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "RecoverySucceeded" }));
+            _connection.ConnectionBlocked += (sender, e) => _logger.LogError(new EventLog { Source = nameof(MessageQueueClient), Target = "RabbitMQ Connection", Event = "ConnectionBlocked", Infomations = new { e.Reason } });
+            _connection.ConnectionRecoveryError += (sender, e) => _logger.LogError(new EventLog { Source = nameof(MessageQueueClient), Target = "RabbitMQ Connection", Event = "ConnectionRecoveryError", Infomations = new { Errors = e.Exception.GetErrors() } });
+            _connection.ConnectionShutdown += (sender, e) => _logger.LogError(new EventLog { Source = nameof(MessageQueueClient), Target = "RabbitMQ Connection", Event = "ConnectionShutdown", Infomations = new { e.Cause, e.ClassId, e.MethodId, e.ReplyCode, e.ReplyText } });
+            _connection.ConnectionUnblocked += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(MessageQueueClient), Target = "RabbitMQ Connection", Event = "ConnectionUnblocked" });
+            _connection.RecoverySucceeded += (sender, e) => _logger.LogInformation(new  EventLog{ Source = nameof(MessageQueueClient), Target = "RabbitMQ Connection", Event = "RecoverySucceeded" });
             
         }
 
@@ -47,14 +49,14 @@ namespace Citadel.Rabbit
             return await Task.Run(() =>
             {
                 var channel = _connection.CreateModel();
-                channel.BasicAcks += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "BasicAcks", e.DeliveryTag, e.Multiple }));
-                channel.BasicNacks += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "BasicNacks", e.DeliveryTag, e.Multiple, e.Requeue }));
-                channel.BasicRecoverOk += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "BasicRecoverOk" }));
-                channel.BasicReturn += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "BasicReturn", ContentLength = e.Body.Length, e.Exchange, e.ReplyCode, e.ReplyText, e.RoutingKey }));
-                channel.CallbackException += (sender, e) => _logger.LogError(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "CallbackException", e.Detail, Errors = e.Exception.GetErrors() }));
-                channel.FlowControl += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "FlowControl", e.Active }));
-                channel.ModelShutdown += (sender, e) => _logger.LogWarning(JsonConvert.SerializeObject(new { Source = nameof(MessageQueueClient), Event = "ModelShutdown", e.Cause, e.ClassId, e.MethodId, e.ReplyCode, e.ReplyText }));
-                
+                channel.BasicAcks += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(MessageQueueClient), Target = "Channel", Event = "BasicAcks", Infomations = new { e.DeliveryTag, e.Multiple } });
+                channel.BasicNacks += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(MessageQueueClient), Target = "Channel", Event = "BasicNacks", Infomations = new { e.DeliveryTag, e.Multiple, e.Requeue } });
+                channel.BasicRecoverOk += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(MessageQueueClient), Target = "Channel", Event = "BasicRecoverOk" });
+                channel.BasicReturn += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(MessageQueueClient), Target = "Channel", Event = "BasicReturn", Infomations = new { ContentLength = e.Body.Length, e.Exchange, e.ReplyCode, e.ReplyText, e.RoutingKey } });
+                channel.CallbackException += (sender, e) => _logger.LogError(new EventLog { Source = nameof(MessageQueueClient), Target = "Channel", Event = "CallbackException", Infomations = new { e.Detail, Errors = e.Exception.GetErrors() } });
+                channel.FlowControl += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(MessageQueueClient), Target = "Channel", Event = "FlowControl", Infomations = new { e.Active } });
+                channel.ModelShutdown += (sender, e) => _logger.LogWarning(new EventLog { Source = nameof(MessageQueueClient), Target = "Channel", Event = "ModelShutdown", Infomations = new { e.Cause, e.ClassId, e.MethodId, e.ReplyCode, e.ReplyText } });
+
 
                 var arguments = args == null ? new Dictionary<string, object>() : args.Map();
 

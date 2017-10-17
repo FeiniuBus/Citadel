@@ -1,29 +1,28 @@
-﻿using Citadel.BackgroundService.Data.DomainModel;
-using Citadel.Data;
-using Newtonsoft.Json;
-using System;
+﻿using Citadel.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Citadel.BackgroundService
+namespace Citadel.BackgroundService.Server
 {
     public class BackgroundClient
     {
         private readonly IDbConnectionFactory _dbConnectionFactory;
         private readonly IMessageQueueClientFactory _messageQueueClientFactory;
         private readonly JobPersistenter _jobPersistenter;
+        private readonly BackgroundServiceOptions _backgroundServiceOptions;
 
-        public BackgroundClient(IDbConnectionFactory dbConnectionFactory, IMessageQueueClientFactory messageQueueClientFactory, JobPersistenter jobPersistenter)
+        public BackgroundClient(IDbConnectionFactory dbConnectionFactory, IMessageQueueClientFactory messageQueueClientFactory, JobPersistenter jobPersistenter, BackgroundServiceOptions backgroundServiceOptions)
         {
             _dbConnectionFactory = dbConnectionFactory;
             _messageQueueClientFactory = messageQueueClientFactory;
             _jobPersistenter = jobPersistenter;
+            _backgroundServiceOptions = backgroundServiceOptions;
         }
 
-        public async Task Enqueue(JobInfo jobInfo, TimeSpan delay)
+        public async Task Enqueue(JobInfo jobInfo)
         {
             var client = _messageQueueClientFactory.Create();
-            var exchange = await client.DelayExchangeDeclareAsync("background.delay.exchange", "topic", true, null);
+            var exchange = await client.DelayExchangeDeclareAsync(_backgroundServiceOptions.Exchange, _backgroundServiceOptions.ExchangeType, true, null);
             var job = await _jobPersistenter.AddJobAsync(jobInfo);
             var transferMessage = new TransferMessage
             {
@@ -31,8 +30,7 @@ namespace Citadel.BackgroundService
                 Body = job.Message.Content,
                 Claims = job.Message.Claims
             };
-
-            await exchange.PublishAsync("background.job", transferMessage, new { Headers = new Dictionary<string, object>() { ["x-delay"] = (int)delay.TotalMilliseconds } });
+            await exchange.PublishAsync(_backgroundServiceOptions.Topic, transferMessage, new { Headers = new Dictionary<string, object>() { ["x-delay"] = (int)jobInfo.DelayTime.TotalMilliseconds } });
         }
     }
 }

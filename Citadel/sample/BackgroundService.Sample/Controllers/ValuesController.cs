@@ -35,7 +35,8 @@ namespace BackgroundService.Sample.Controllers
         public async Task Post([FromBody]string value)
         {
             string text = DateTime.Now.ToString();
-            await _backgroundClient.Enqueue(JobInfo.CreateDelayJob(() => Console.WriteLine(text)), TimeSpan.FromMinutes(1));
+            var cls = new BackgroundServiceTestLib.Class1();
+            await _backgroundClient.Enqueue(JobInfo.CreateDelayJob(() => cls.Run(text) , TimeSpan.FromMinutes(1)));
         }
 
         // PUT api/values/5

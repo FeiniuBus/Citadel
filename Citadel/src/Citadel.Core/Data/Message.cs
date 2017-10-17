@@ -14,6 +14,8 @@ namespace Citadel.Data
 
         public string Id { get; set; }
         public string MessageType { get; set; }
+        public string Exchange { get; set; }
+        public string Topic { get; set; }
         public string Content { get; set; }
         public MessageState State { get; set; }
         public string StateName => State.ToString();

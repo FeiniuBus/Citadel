@@ -5,7 +5,7 @@
         Scheduled,
         Queued,
         Processing,
-        Published,
+        Succeed,
         Failed
     }
 }

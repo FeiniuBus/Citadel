@@ -1,4 +1,5 @@
 ﻿using Citadel.Infrastructure;
+using Citadel.Logging;
 using Citadel.Rabbit.Infrastructure;
 using Citadel.Shared;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ using RabbitMQ.Client.Events;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Citadel.Extensions;
 
 namespace Citadel.Rabbit
 {
@@ -42,10 +44,10 @@ namespace Citadel.Rabbit
         {
             var consumer = new EventingBasicConsumer(_channel);
 
-            consumer.ConsumerCancelled += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(RabbitConsumer), Event = "ConsumerCancelled", e.ConsumerTag }));
-            consumer.Received += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(RabbitConsumer), Event = "Received", e.ConsumerTag, ContentLength = e.Body.Length, e.DeliveryTag, e.Exchange,e.Redelivered, e.RoutingKey }));
-            consumer.Registered += (sender, e) => _logger.LogInformation(JsonConvert.SerializeObject(new { Source = nameof(RabbitConsumer), Event = "Registered", e.ConsumerTag }));
-            consumer.Shutdown += (sender, e) => _logger.LogWarning(JsonConvert.SerializeObject(new { Source = nameof(RabbitConsumer), Event = "Shutdown", e.Cause, e.ClassId, e.MethodId, e.ReplyCode, e.ReplyText }));
+            consumer.ConsumerCancelled += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(RabbitConsumer), Target="RabbitMQ Consumer", Event = "ConsumerCancelled", Infomations = new { e.ConsumerTag } });
+            consumer.Received += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(RabbitConsumer), Target = "RabbitMQ Consumer", Event = "Received", Infomations = new { e.ConsumerTag, ContentLength = e.Body.Length, e.DeliveryTag, e.Exchange, e.Redelivered, e.RoutingKey } });
+            consumer.Registered += (sender, e) => _logger.LogInformation(new EventLog { Source = nameof(RabbitConsumer), Target = "RabbitMQ Consumer", Event = "Registered", Infomations = new { e.ConsumerTag } });
+            consumer.Shutdown += (sender, e) => _logger.LogWarning(new EventLog { Source = nameof(RabbitConsumer), Target = "RabbitMQ Consumer", Event = "Shutdown", Infomations = new { e.Cause, e.ClassId, e.MethodId, e.ReplyCode, e.ReplyText } });
 
             consumer.Received += (sender, e) => OnDelivered?.Invoke(this, new DeliverEventArgs(e.Body, 
                 new

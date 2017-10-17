@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Citadel.Core\Shared\AnomalousObjectExtensions.cs" Link="Shared\AnomalousObjectExtensions.cs" />
-    <Compile Include="..\Citadel.Core\Shared\IDbConnectionExtensions.cs" Link="Shared\IDbConnectionExtensions.cs" />
-    <Compile Include="..\Citadel.Core\Shared\StringExtensions.cs" Link="Shared\StringExtensions.cs" />
+    <Compile Remove="Shared\**" />
+    <EmbeddedResource Remove="Shared\**" />
+    <None Remove="Shared\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,10 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Citadel.Core\Citadel.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Shared\" />
   </ItemGroup>
 
 </Project>
